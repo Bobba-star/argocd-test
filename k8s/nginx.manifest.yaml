@@ -1,27 +1,40 @@
+# nginx
 ---
+# namespace
+kind: Namespace
+apiVersion: v1
+metadata:
+  name: nginx
+
+---
+# ingress
 apiVersion: networking.k8s.io/v1
 kind: Ingress
 metadata:
-  name: nginx
+  name: nginx-ingress
+  namespace: nginx
   annotations:
     kubernetes.io/ingress.class: "traefik"
 spec:
   rules:
-  - http:
+  - host: nginx.192-168-11-150.nip.io
+    http:
       paths:
       - path: /
         pathType: Prefix
         backend:
           service:
-            name: nginx
+            name: nginx-svc
             port:
               number: 80
 
 ---
+# service
 apiVersion: v1
 kind: Service
 metadata:
-  name: nginx
+  name: nginx-svc
+  namespace: nginx
 spec:
   ports:
     - port: 80
@@ -30,10 +43,12 @@ spec:
     app:  nginx
 
 ---
+# deployment
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: nginx-nginx
+  name: nginx
+  namespace: nginx
 spec:
   selector:
     matchLabels:
