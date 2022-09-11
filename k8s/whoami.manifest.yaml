@@ -1,0 +1,55 @@
+# whoami ingress test
+---
+# deployment
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: whoami
+spec:
+  selector:
+    matchLabels:
+      app: whoami
+  replicas: 2
+  template:
+    metadata:
+      labels:
+        app: whoami
+    spec:
+      containers:
+      - name: my-app
+        image: traefik/whoami
+        ports:
+        - containerPort: 80
+
+---
+# service
+apiVersion: v1
+kind: Service
+metadata:
+  name: whoami
+spec:
+  selector:
+    app: whoami
+  type: NodePort
+  ports:
+  - name: http
+    port: 80
+    
+---
+# ingress
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: whoami-ingress
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`whoami.192-168-11-150.nip.io`)
+      priority: 10
+      services:
+        - name: whoami-svc
+          port: 80
+  tls:
+    secretName: whoami-tls
