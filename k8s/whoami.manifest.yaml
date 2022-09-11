@@ -26,7 +26,7 @@ spec:
 apiVersion: v1
 kind: Service
 metadata:
-  name: whoami
+  name: whoami-svc
 spec:
   selector:
     app: whoami
