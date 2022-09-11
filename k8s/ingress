@@ -1,0 +1,17 @@
+apiVersion: traefik.containo.us/v1alpha1
+kind: IngressRoute
+metadata:
+  name: my-app-ingress
+  namespace: my-app
+spec:
+  entryPoints:
+    - websecure
+  routes:
+    - kind: Rule
+      match: Host(`my-app.192-168-11-150.nip.io`)
+      priority: 10
+      services:
+        - name: my-app-svc
+          port: 5678
+  tls:
+    secretName: my-app-tls
