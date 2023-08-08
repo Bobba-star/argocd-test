@@ -14,7 +14,9 @@ metadata:
   name: nginx-ingress
   namespace: nginx
   annotations:
-    kubernetes.io/ingress.class: "traefik"
+    kubernetes.io/ingress.class: traefik
+    traefik.ingress.kubernetes.io/router.entrypoints: websecure
+    traefik.ingress.kubernetes.io/redirect-entry-point: websecure
 spec:
   rules:
   - host: nginx.192-168-11-21.nip.io
